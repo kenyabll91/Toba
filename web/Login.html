@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TOBA Titan Online Banking Application</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="newcss.css" type="text/css">
+    </head>
+    <body>
+        <header>
+            <h1>TOBA Titan Online Banking Application</h1>
+        </header>
+        <div id="nav">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Login.html">Login</a></li>
+            <li><a href="NewCustomer.html">New Customer</a></li>
+            <li><a href="options.html">Options</a></li>
+        </ul>
+        </div>
+        
+        <form action="LoginServlet" method="post">
+            <label>Username:</label>
+            <input type="text" name="username" required><br>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <input type="hidden" name="action" value="add">
+            <input type="submit" value="Submit"> 
+        </form>
+        
+        <a href="NewCustomer.html">New Customer Application</a><br>
+    </body>
+</html>
