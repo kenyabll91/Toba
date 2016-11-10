@@ -17,58 +17,43 @@ import javax.servlet.http.HttpSession;
  *
  * @author Kimbreal
  */
-@WebServlet(urlPatterns = {"/NewCustomerServlet"})
-public class NewCustomerServlet extends HttpServlet {
+@WebServlet(name = "Password_reset", urlPatterns = {"/Password_reset"})
+public class Password_resetServlet extends HttpServlet {
 
-    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "/NewCustomer.html";
-        
         String action = request.getParameter("action");
+        
         if (action == null) {
             action = "join";
         }
-        
         if (action.equals("join")) {
             url = "/NewCustomer.html";
         }
-        else if (action.equals("add")) {
-            String firstname = request.getParameter("firstname");
-            String lastname = request.getParameter("lastname");
-            String phonenumber = request.getParameter("phonenumber");
-            String address = request.getParameter("address");
-            String city = request.getParameter("city");
-            String state = request.getParameter("state");
-            String zipcode = request.getParameter("zipcode");
-            String email = request.getParameter("email");
+        else if (action.equals("reset")) {
+            String password = request.getParameter("password");
             
-            User user = new User(firstname, lastname, phonenumber, 
-            address, city, state, zipcode, email);
-            
-            url = "/Success.jsp";
-            
-            String message = null;
-            if (firstname == null || lastname == null || phonenumber == null ||
-                    address == null || city == null || state == null || zipcode == null
-                     || email == null || firstname.isEmpty() || lastname.isEmpty() || 
-                    phonenumber.isEmpty() || address.isEmpty() || city.isEmpty() || 
-                    state.isEmpty() || zipcode.isEmpty() || email.isEmpty()) {
-                message = "Please fill out all the form fields.";
-                url = "/NewCustomer.html";
-            }
             HttpSession session = request.getSession();
-              session.setAttribute("user", user);
-              request.setAttribute("message", message);
-        
+            User user = (User) session.getAttribute("user");
+            user.setPassword(password);
+            url = "/acount_activity.html";
         }
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
         
-       
-      
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -107,5 +92,5 @@ public class NewCustomerServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }
