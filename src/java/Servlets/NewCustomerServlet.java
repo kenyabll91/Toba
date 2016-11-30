@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Servlets.Account.accountType;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,13 +43,27 @@ public class NewCustomerServlet extends HttpServlet {
             String state = request.getParameter("state");
             String zipcode = request.getParameter("zipcode");
             String email = request.getParameter("email");
+            String username = lastname.concat(zipcode);
+            String password = "welcome1";
+            
             
             User user = new User(firstname, lastname, phonenumber, 
-            address, city, state, zipcode, email);
+            address, city, state, zipcode, email, username, password);
+            
+            UserDB.insert(user);
+            Account checking = new account("Checking", user);
+            Account savings = new Account("Savings", 25.00, user);
+            AccountDB.insert(savings);
+            AccountDB.insert(checking);
+            
+
+            
+            
+            request.setAttribute("user", user);
             
             url = "/Success.jsp";
             
-            String message = null;
+            String message;
             if (firstname == null || lastname == null || phonenumber == null ||
                     address == null || city == null || state == null || zipcode == null
                      || email == null || firstname.isEmpty() || lastname.isEmpty() || 
@@ -59,7 +74,7 @@ public class NewCustomerServlet extends HttpServlet {
             }
             HttpSession session = request.getSession();
               session.setAttribute("user", user);
-              request.setAttribute("message", message);
+              request.setAttribute("message", url);
         
         }
         getServletContext()

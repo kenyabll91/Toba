@@ -6,12 +6,12 @@
 package Servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -31,19 +31,36 @@ public class TransactionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TransactionServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TransactionServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+       HttpSession session = request.getSession();
+       User user = (User)session.getAttribute("user");
+       String amount = request.getParameter("amount");
+       
+       session.setAttribute("user", user);
+       Account checking = AccountDB.selectAccount(user, "checking");
+       Account savings = AccountDB.selectAccount(user, "savings");
+       
+       Double checkingBalance = checking.getStartBalance();
+       Double savingBalance = checking.getStartBalance();
+       
+       checking.credit(Double.parseDouble(amount));
+       Transaction t1 = new Transaction(
+         checkingBalance, Double.parseDouble(amount), savings.getStartBalance(), "Credit");
+       checking.addTransactions(t1);
+       
+       savings.debit(Double.parseDouble(amount));
+       Transaction t2 = new Transaction(
+        savingBalance, Double.parseDouble(amount), savings.getStartBalance(), "Debit");
+       savings.addTransactions(t2);
+       
+       AccountDB.updateBalance(savings);
+       AccountDB.updateBalance(checking);
+       
+       session.setAttribute("checking", checking);
+       session.setAttribute("savings", savings);
+       
+       getServletContext()
+               .getRequestDispatcher("/Account_activity.jsp")
+               .forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -84,5 +101,6 @@ public class TransactionServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

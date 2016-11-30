@@ -22,5 +22,6 @@
         <p>Email: ${user.email}</p>
         <p>Username: ${user.username}</p>
         <p>Password: ${user.password}</p>
+        <a href="Transaction.html">Back Home<a/>
     </body>
 </html>

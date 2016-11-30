@@ -31,7 +31,7 @@ public class Password_resetServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/NewCustomer.html";
+        String url = "/Password_reset.jsp";
         String action = request.getParameter("action");
         
         if (action == null) {
@@ -46,7 +46,8 @@ public class Password_resetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
             user.setPassword(password);
-            url = "/acount_activity.html";
+            UserDB.update(user);
+            url = "/Account_activity.jsp";
         }
         getServletContext()
                 .getRequestDispatcher(url)

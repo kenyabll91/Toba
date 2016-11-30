@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Toba"/>
+<Context path="/Toba">
+
+    <Resource name="jdbc/mydatabase" auth="Container"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/mydatabase"
+        username="root" password="sesame"
+        maxActive="100" maxIdle="30" maxWait="10000"
+        logAbandoned="true" removeAbandoned="true"
+        removeAbandonedTimeout="60" type="javax.sql.DataSource" />
+    
+</Context>

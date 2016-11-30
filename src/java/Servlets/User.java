@@ -1,8 +1,23 @@
 package Servlets;
 
 import java.io.Serializable;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+@Entity
 public class User implements Serializable { 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    public Long getId(){
+        return id;
+    }
+    
+    public void setId(Long id){
+        this.id = id;
+    }
     private String firstname;
     private String lastname;
     private String phonenumber;
@@ -42,6 +57,10 @@ public class User implements Serializable {
         this.email = email;
         this.username = lastname + zipcode;
         this.password = "welcome1";
+    }
+
+    User(String firstname, String lastname, String phonenumber, String address, String city, String state, String zipcode, String email, String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public String getFirstName() {
