@@ -18,12 +18,14 @@
         <div id="nav">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="Login.html">Login</a></li>
-            <li><a href="NewCustomer.html">New Customer</a></li>
+            <li><a href="Login.jsp">Login</a></li>
+            <li><a href="NewCustomer.jsp">New Customer</a></li>
             <li><a href="Account_activity.jsp">Account Activity</a></li>
-            <li><a href="Account_activity.jsp">Transfer Funds</a></li>
+            <li><a href="Transfer_funds.jsp">Transfer Funds</a></li>
+            <li><a href="Transaction.jsp">Transaction</a></li>
         </ul>
         <h1>Transfer Funds</h1>
+        <h2><i>${message1}</i></h2>
         <p>Checking account balance: ${checking.startingBal}</p>
         <p>Savings account balance: ${savings.startingBal}</p>
         <form action="TransactionServlet" method="post">
@@ -31,6 +33,5 @@
             <input type="text" name="amount" required><br>
             <input type="submit" value="Submit Transfer" class="margin_left">
         </form><br>
-        </form>
     </body>
 </html>

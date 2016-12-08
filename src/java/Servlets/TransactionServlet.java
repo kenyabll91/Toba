@@ -34,6 +34,8 @@ public class TransactionServlet extends HttpServlet {
        HttpSession session = request.getSession();
        User user = (User)session.getAttribute("user");
        String amount = request.getParameter("amount");
+       String message1="";
+       String url ="";
        
        session.setAttribute("user", user);
        Account checking = AccountDB.selectAccount(user, "checking");
@@ -41,7 +43,12 @@ public class TransactionServlet extends HttpServlet {
        
        Double checkingBalance = checking.getStartBalance();
        Double savingBalance = checking.getStartBalance();
-       
+       if (Double.parseDouble(amount) >= savingBalance) {
+           message1 = "Insufficient Amount";
+            url = "/Transfer_funds.jsp";
+            request.setAttribute("message1", message1);
+       }
+       else {
        checking.credit(Double.parseDouble(amount));
        Transaction t1 = new Transaction(
          checkingBalance, Double.parseDouble(amount), savings.getStartBalance(), "Credit");
@@ -57,9 +64,10 @@ public class TransactionServlet extends HttpServlet {
        
        session.setAttribute("checking", checking);
        session.setAttribute("savings", savings);
-       
+       url = "/Account_activity.jsp";
+       }
        getServletContext()
-               .getRequestDispatcher("/Account_activity.jsp")
+               .getRequestDispatcher(url)
                .forward(request, response);
     }
 

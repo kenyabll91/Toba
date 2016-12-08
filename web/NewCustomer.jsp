@@ -1,9 +1,11 @@
+<%-- 
+    Document   : NewCustomer
+    Created on : Dec 7, 2016, 10:40:41 PM
+    Author     : Kimbreal
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>TOBA Titan Online Banking Appliccation</title>
@@ -22,6 +24,7 @@ and open the template in the editor.
             <li><a href="NewCustomer.html">New Customer</a></li>
             <li><a href="Account_Activity.jsp">Account Activity</a></li>
             <li><a href="Transfer_funds.jsp">Transfer Funds</a></li>
+            <li><a href="Transaction.html">Transaction</a></li>
         </ul>
         </div>
 

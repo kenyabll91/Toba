@@ -1,6 +1,13 @@
+<%-- 
+    Document   : Login
+    Created on : Dec 7, 2016, 10:37:08 PM
+    Author     : Kimbreal
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
+   <head>
         <title>TOBA Titan Online Banking Application</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +20,7 @@
         <div id="nav">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="Login.html">Login</a></li>
+            <li><a href="Login.jsp">Login</a></li>
             <li><a href="NewCustomer.html">New Customer</a></li>
             <li><a href="Account_Activity.jsp">Account Activity</a></li>
             <li><a href="Transfer_funds.jsp">Transfer Funds</a></li>
@@ -21,11 +28,12 @@
         </div>
         
         <form action="LoginServlet" method="post">
+            <input type="hidden" name="action" value="add">
             <label>Username:</label>
             <input type="text" name="username" required><br>
             <label>Password:</label>
-            <input type="password" name="password" required>
-            <input type="hidden" name="action" value="add">
+            <input type="text" name="password" required>
+            
             <input type="submit" value="Submit"> 
         </form>
         

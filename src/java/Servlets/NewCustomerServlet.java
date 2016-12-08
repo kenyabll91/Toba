@@ -5,7 +5,6 @@
  */
 package Servlets;
 
-import Servlets.Account.accountType;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,20 +20,16 @@ import javax.servlet.http.HttpSession;
 @WebServlet(urlPatterns = {"/NewCustomerServlet"})
 public class NewCustomerServlet extends HttpServlet {
 
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/NewCustomer.html";
-        
+        String url = "/index.html";
+
         String action = request.getParameter("action");
         if (action == null) {
             action = "join";
         }
         
-        if (action.equals("join")) {
-            url = "/NewCustomer.html";
-        }
-        else if (action.equals("add")) {
+        if (action.equals("add")) {
             String firstname = request.getParameter("firstname");
             String lastname = request.getParameter("lastname");
             String phonenumber = request.getParameter("phonenumber");
@@ -45,45 +40,45 @@ public class NewCustomerServlet extends HttpServlet {
             String email = request.getParameter("email");
             String username = lastname.concat(zipcode);
             String password = "welcome1";
-            
-            
-            User user = new User(firstname, lastname, phonenumber, 
-            address, city, state, zipcode, email, username, password);
-            
+            String message;
+            if (firstname.equals("") || lastname.equals("") || email.equals("") ||address.equals("") || city.equals("") || state.equals("") || zipcode.equals("")) {
+                message = "*Please fill out all boxes*";
+                url = "/NewCustomer.jsp";
+            } else {
+                message = "";
+                url = "/Success.jsp";
+            }
+
+            User user = new User();
+            user.setUsername(lastname + zipcode);
+            user.setFirstName(firstname);
+            user.setLastName(lastname);
+            user.setPhoneNumber(phonenumber);
+            user.setAddress(address);
+            user.setCity(city);
+            user.setState(state);
+            user.setZipcode(zipcode);
+            user.setEmail(email);
+            user.setPassword(password);
+            Account checking = new Account("Checking", 0, user);
+            Account savings = new Account("Savings", 25.0, user);
+
             UserDB.insert(user);
-            Account checking = new account("Checking", user);
-            Account savings = new Account("Savings", 25.00, user);
             AccountDB.insert(savings);
             AccountDB.insert(checking);
-            
-
-            
-            
-            request.setAttribute("user", user);
-            
-            url = "/Success.jsp";
-            
-            String message;
-            if (firstname == null || lastname == null || phonenumber == null ||
-                    address == null || city == null || state == null || zipcode == null
-                     || email == null || firstname.isEmpty() || lastname.isEmpty() || 
-                    phonenumber.isEmpty() || address.isEmpty() || city.isEmpty() || 
-                    state.isEmpty() || zipcode.isEmpty() || email.isEmpty()) {
-                message = "Please fill out all the form fields.";
-                url = "/NewCustomer.html";
-            }
             HttpSession session = request.getSession();
-              session.setAttribute("user", user);
-              request.setAttribute("message", url);
-        
+            session.setAttribute("user", user);
+            request.setAttribute("user", user);
+            request.setAttribute("message", message);
+
+
         }
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
-        
-       
-      
+
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -113,14 +108,10 @@ public class NewCustomerServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }

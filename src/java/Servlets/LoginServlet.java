@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -21,7 +22,7 @@ public class LoginServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/Login.html";
+        String url = "/Login.jsp";
         
         String action = request.getParameter("action");
         if (action == null) {
@@ -29,21 +30,30 @@ public class LoginServlet extends HttpServlet {
         }
         
         if (action.equals("join")) {
-            url = "/Login.html";
+            url = "/Login.jsp";
         }
         else if (action.equals("add")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            if (username.equals("jsmith@toba.com") && password.equals("letmein")) {
-            url = "/Account_activity.html";
+            User user = UserDB.selectUser(password, username);
+            Account account = new Account();
+            String message = null;
+            if (username.equals("") || password.equals("")) {
+                message = "*Please fill out all boxes*";
+                url = "/Login.jsp";
+            } else {
+                message = "";
+            }
+            Login login = new Login(username, password);
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
         }
             else {
                 url = "/Login_failure.html";
             }
-            
-            
         
-        }
+       
+            
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
