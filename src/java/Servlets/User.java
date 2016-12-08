@@ -1,6 +1,7 @@
 package Servlets;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,9 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
+    public String salt;
+    public String passWord;
+    public String userName;
 
     private String firstname;
     private String lastname;
@@ -21,8 +25,7 @@ public class User implements Serializable {
     private String state;
     private String zipcode;
     private String email;
-    private String username;
-    private String password;
+    private long date;
 
     public User() {
         firstname = "";
@@ -33,8 +36,10 @@ public class User implements Serializable {
         state = "";
         zipcode = "";
         email = "";
-        username = "";
-        password = "";
+        userName = "";
+        passWord = "";
+        salt = "";
+        date = new Date().getTime();
 
     }
 
@@ -48,8 +53,10 @@ public class User implements Serializable {
         this.state = state;
         this.zipcode = zipcode;
         this.email = email;
-        this.username = lastname + zipcode;
-        this.password = "welcome1";
+        this.userName = userName;
+        this.passWord = passWord;
+        this.date = date;
+        this.salt = "";
     }
 
     User(String firstname, String lastname, String phonenumber, String address, String city, String state, String zipcode, String email, String username, String password) {
@@ -127,20 +134,20 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String username) {
+        this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
     public double getCheckingBalance() {
@@ -156,5 +163,17 @@ public class User implements Serializable {
             return savings.getStartBalance();
         return 0.00;
             
+    }
+    
+    public String getSalt() {
+        return salt;
+    }
+    
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+    
+    public long getDate() {
+        return date;
     }
 }

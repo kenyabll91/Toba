@@ -6,6 +6,8 @@
 package Servlets;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +41,8 @@ public class NewCustomerServlet extends HttpServlet {
             String zipcode = request.getParameter("zipcode");
             String email = request.getParameter("email");
             String username = lastname.concat(zipcode);
-            String password = "welcome1";
+            String s = "welcome1";
+            String password = s;
             String message;
             if (firstname.equals("") || lastname.equals("") || email.equals("") ||address.equals("") || city.equals("") || state.equals("") || zipcode.equals("")) {
                 message = "*Please fill out all boxes*";
@@ -50,7 +53,7 @@ public class NewCustomerServlet extends HttpServlet {
             }
 
             User user = new User();
-            user.setUsername(lastname + zipcode);
+            user.setUserName(lastname + zipcode);
             user.setFirstName(firstname);
             user.setLastName(lastname);
             user.setPhoneNumber(phonenumber);
@@ -59,9 +62,30 @@ public class NewCustomerServlet extends HttpServlet {
             user.setState(state);
             user.setZipcode(zipcode);
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassWord(password);
             Account checking = new Account("Checking", 0, user);
             Account savings = new Account("Savings", 25.0, user);
+            
+            try {
+                PasswordUtil.checkPasswordStrength(password);
+                message = "";
+            } catch (Exception e) {
+                message = e.getMessage();
+            }
+            request.setAttribute("message", message);
+            
+            String hashedPassword;
+            String salt = "";
+            String saltedAndHashedPassword;
+            try {
+                salt = PasswordUtil.getSalt();
+                saltedAndHashedPassword = PasswordUtil.hashPassword(password + salt);
+                user.setPassWord(saltedAndHashedPassword);
+                user.setSalt(salt);
+            } catch (NoSuchAlgorithmException ex) {
+                hashedPassword = ex.getMessage();
+                saltedAndHashedPassword = ex.getMessage();
+            }
 
             UserDB.insert(user);
             AccountDB.insert(savings);
@@ -70,6 +94,12 @@ public class NewCustomerServlet extends HttpServlet {
             session.setAttribute("user", user);
             request.setAttribute("user", user);
             request.setAttribute("message", message);
+            session.setAttribute("s", s);
+            Date currentDate = new Date();
+            request.setAttribute("currentDate", currentDate);
+            
+            session.setAttribute("salt", salt);
+            session.setAttribute("saltedAndHashedPassword", saltedAndHashedPassword);
 
 
         }

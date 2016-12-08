@@ -1,5 +1,6 @@
 package Servlets;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
@@ -45,12 +46,11 @@ public class UserDB {
         }
     }
     
-    public static User selectUser(String password, String username) {
+    public static User selectUser(String username) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT u FROM User u " + 
-                "WHERE u.password = :password AND u.username = :username";
+                "WHERE u.username = :username";
         TypedQuery<User> q = em.createQuery(qString, User.class);
-        q.setParameter("password", password);
         q.setParameter("username", username);
         try {
             User user = q.getSingleResult();
@@ -61,5 +61,26 @@ public class UserDB {
             em.close();
         }
         
+    }
+    
+    public static boolean userExist(String username) {
+        User u = selectUser(username);
+        return u != null;
+    }
+    
+    public static List<User> selectUsers() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        List<User> users;
+        String qString = "SELECT u FROM User u";
+        TypedQuery<User> q = em.createQuery(qString, User.class);
+        
+        try {
+            users = q.getResultList();
+            return users;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
     }
 }

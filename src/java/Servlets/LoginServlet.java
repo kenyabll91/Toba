@@ -4,6 +4,7 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         else if (action.equals("add")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            User user = UserDB.selectUser(password, username);
+            User user = UserDB.selectUser(username);
             Account account = new Account();
             String message = null;
             if (username.equals("") || password.equals("")) {
@@ -46,7 +47,23 @@ public class LoginServlet extends HttpServlet {
             }
             Login login = new Login(username, password);
             HttpSession session = request.getSession();
+            
+            String salt ="";
+            String saltedAndHashedPassword;
+            try {
+                salt = user.getSalt();
+                saltedAndHashedPassword = PasswordUtil.hashPassword(password + salt);
+            } catch (NoSuchAlgorithmException ex) {
+                saltedAndHashedPassword = ex.getMessage();
+            }
             session.setAttribute("user", user);
+            request.setAttribute("Login", login);
+            request.setAttribute("message", message);
+            
+            if (user.getPassWord().equals(saltedAndHashedPassword)) {
+                session.setAttribute("user", user);
+                url = "/Account_activity.jsp";
+            }
         }
             else {
                 url = "/Login_failure.html";

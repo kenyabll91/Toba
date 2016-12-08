@@ -51,7 +51,7 @@ public class AccountDB {
     public static Account selectAccount(User user, String account) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT a FROM account a " +
-                "WHERE a.username = :user AND a.accountType = :Account";
+                "WHERE a.user = :user AND a.accountType = :Account";
         TypedQuery<Account> q = em.createQuery(qString, Account.class);
         q.setParameter("user", user);
         q.setParameter("Account", account);

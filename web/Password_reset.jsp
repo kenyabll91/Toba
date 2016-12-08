@@ -12,11 +12,13 @@
         <title>New Password</title>
     </head>
     <body>
+        <p><i>${message}</i></p>
         <h1>Enter new Password!</h1>
-        <p>Username: ${user.username}</p>
+        
         <form action="Password_resetServlet" method="post">
-            <label>Password:</label>
-            <input type="text" name="password" value="${user.password}"><br>
+            <label>Username:</label>
+            <p>Username: ${user.userName}</p>
+            <input type="text" name="NewPassword" value="${user.passWord}"><br>
             <input type="hidden" name="action" value="add">
             <input type="submit" value="Submit"> 
         </form>
